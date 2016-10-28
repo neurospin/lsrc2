@@ -43,7 +43,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Python LimeSurvey'
+project = u'lsrc2'
 copyright = u'2016, Dimitri Papadopoulos'
 
 # The version info for the project you're documenting, acts as replacement for
