@@ -26,9 +26,7 @@
 #
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL-C license and that you accept its terms.
-"""Access LimeSurvey servers using `Remote Control 2 API`_
-
-.. _Remote Control 2 API: https://manual.limesurvey.org/RemoteControl_2_API
+"""Control remote LimeSurvey_ servers using `Remote Control 2 API`_
 
 """
 
@@ -38,7 +36,7 @@ import logging
 
 
 class LimeSurveySession(object):
-    """LimeSurvey `Remote Control 2 API`_ (LSRC2) session
+    """LimeSurvey_ `Remote Control 2 API`_ (*LSRC2*) session
 
     Use JSON-RPC instead of XML-RPC because the documentation reads:
         We recommend in general to use JSON-RPC because it is well tested

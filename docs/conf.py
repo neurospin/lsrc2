@@ -28,7 +28,7 @@ import os
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -43,7 +43,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'python-limesurvey'
+project = u'Python LimeSurvey'
 copyright = u'2016, Dimitri Papadopoulos'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -63,7 +63,7 @@ release = '0.0.1'
 # non-false value, then it is used:
 #today = ''
 # Else, today_fmt is used as the format for a strftime call.
-#today_fmt = '%B %d, %Y'
+today_fmt = '%F'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.

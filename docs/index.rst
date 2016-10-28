@@ -1,22 +1,18 @@
-.. limesurvey documentation master file, created by
-   sphinx-quickstart on Fri Oct 28 16:06:03 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Python LimeSurvey
+=================
 
-Welcome to limesurvey's documentation!
-======================================
+The Python LimeSurvey module encapuslates the JSON-RPC LimeSurvey_ `Remote
+Control 2 API`_ (*LSRC2*) API in a straightforward Python API. Now your
+Python scripts will easily interact with remote LimeSurvey_ servers::
 
-Contents:
+    >>> s = limesurvey.LimeSurveySession(base_url, username, password)
+    >>> surveys, error = s.surveys()
 
-.. toctree::
-   :maxdepth: 2
+.. _LimeSurvey: https://www.limesurvey.org
+.. _Remote Control 2 API: https://manual.limesurvey.org/RemoteControl_2_API
 
 
+User Guide
+==========
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+TODO
