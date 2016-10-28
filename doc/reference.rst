@@ -1,5 +1,5 @@
 Reference Guide
 ===============
 
-.. automodule:: limesurvey
+.. automodule:: lsrc2
    :members:

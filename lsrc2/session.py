@@ -40,28 +40,27 @@ class Session(object):
 
     Basic Usage::
 
-      >>> import limesurvey
-      >>> s = limesurvey.Session('https://lsdemo.limequery.com/admin/remotecontrol', 'limedemo', 'demo')
+      >>> import lsrc2
+      >>> s = lsrc2.Session('https://lsdemo.limequery.com/admin/remotecontrol', 'limedemo', 'demo')
       >>> surveys, error = s.surveys()
       >>> type(surveys), type(error)
       (list, NoneType)
 
     Or as a context manager::
 
-      >>> with limesurvey.Session(url, username, password) as s:
-      >>>     surveys = s.surveys()
-      >>>     type(surveys), type(error)
+      >>> with lsrc2.Session('https://lsdemo.limequery.com/admin/remotecontrol', 'limedemo', 'demo') as s:
+      >>>     surveys, error = s.surveys()
+      >>> type(surveys), type(error)
       (list, NoneType)
 
-
-    Use JSON-RPC instead of XML-RPC because the documentation reads:
+    For now Session is limited to JSON-RPC requests and provides no way
+    to switch to XML-RPC requests as the documentation reads:
         We recommend in general to use JSON-RPC because it is well tested
         and has a much smaller footprint than XML-RPC.
 
     Parameters
     ----------
     url : str
-        The usual LSRC2 URL is: `http://<your_domain>/<your_limesurvey_dir>/index.php/admin/remotecontrol`.
     username : str
     password : str
 
@@ -78,21 +77,11 @@ class Session(object):
 .. _Remote Control 2 API: https://manual.limesurvey.org/RemoteControl_2_API
 
     """
-    __attrs__ = ['url', 'session', 'key']
+    __attrs__ = ['url', 'key']
 
     __request_id = 0
 
     def __init__(self, url, username, password):
-        self.open(url, username, password)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        self.close()
-        return False  # re-raises the exception
-
-    def open(self, url, username, password):
         self.url = url
         # start a Requests session
         self.session = requests.Session()
@@ -100,15 +89,19 @@ class Session(object):
         self.session.headers.update({'content-type': 'application/json'})
         # start a LimeSurvey Remote Control 2 session
         self.key = self._get_session_key(username, password)
-        return self.key
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+        return False  # re-raises the exception
 
     def close(self):
-        key = self.key
-        self._release_session_key(key)
+        """Release LimeSurvey session key, then close Requests session"""
+        self._release_session_key(self.key)
         self.key = None
-        self.session = None
-        self.url = None
-        return key
+        self.session.close()
 
     @staticmethod
     def _generate_request_id():
@@ -200,7 +193,7 @@ class Session(object):
             error : dict
                 Dictionary contains `code` and `message`.
 
-        .. list_surveys: http://api.limesurvey.org/classes/remotecontrol_handle.html#method_list_surveys
+        .. _list_surveys: http://api.limesurvey.org/classes/remotecontrol_handle.html#method_list_surveys
 
         """
         request = self._request('list_surveys', [self.key])
@@ -270,7 +263,9 @@ def session():
     """
     Returns a :class:`Session` for context-management.
 
-    :rtype: Session
+    Returns
+    -------
+        session : Session
 
     """
     return Session()

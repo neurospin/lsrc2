@@ -41,13 +41,13 @@ def license():
 
 
 setup(
-    name='limesurvey',
+    name='lsrc2',
     version='0.0.1',
     description='LimeSurvey Remote Control 2 API client library',
     long_description=readme(),
     license='CeCILL-C',
     author='Dimitri Papadopoulos',
-    url='https://github.com/neurospin/limesurvey',
+    url='https://github.com/neurospin/lsrc2',
     packages=find_packages(exclude=('tests', 'docs')),
     classifiers=[
         "License :: OSI Approved :: CeCILL-C",

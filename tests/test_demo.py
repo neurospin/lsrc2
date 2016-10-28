@@ -28,15 +28,15 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL-C license and that you accept its terms.
 
-import limesurvey
+import lsrc2
 
-LIME_SURVEY_URL = 'https://lsdemo.limequery.com/admin/remotecontrol'
-LIME_SURVEY_USERNAME = 'limedemo'
-LIME_SURVEY_PASSWORD = 'demo'
+LS_DEMO_URL = 'https://lsdemo.limequery.com/admin/remotecontrol'
+LS_DEMO_USERNAME = 'limedemo'
+LS_DEMO_PASSWORD = 'demo'
 
 
 def test1(base_url, username, password):
-    with limesurvey.Session(base_url, username, password) as session:
+    with lsrc2.Session(base_url, username, password) as session:
         surveys, error = session.surveys()
         for survey in surveys:
             title = survey['surveyls_title']
@@ -46,7 +46,7 @@ def test1(base_url, username, password):
 
 
 def test2(base_url, username, password):
-    session = limesurvey.Session(base_url, username, password)
+    session = lsrc2.Session(base_url, username, password)
     surveys, error = session.surveys()
     for survey in surveys:
         title = survey['surveyls_title']
@@ -56,8 +56,8 @@ def test2(base_url, username, password):
 
 
 def main():
-    test1(LIME_SURVEY_URL, LIME_SURVEY_USERNAME, LIME_SURVEY_PASSWORD)
-    test2(LIME_SURVEY_URL, LIME_SURVEY_USERNAME, LIME_SURVEY_PASSWORD)
+    test1(LS_DEMO_URL, LS_DEMO_USERNAME, LS_DEMO_PASSWORD)
+    test2(LS_DEMO_URL, LS_DEMO_USERNAME, LS_DEMO_PASSWORD)
 
 
 if __name__ == "__main__":
