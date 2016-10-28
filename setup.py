@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Copyright (c) 2016 CEA
 #
 # This software is governed by the CeCILL-C license under French law and
@@ -27,21 +27,28 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL-C license and that you accept its terms.
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 def readme():
     with open('README.rst') as f:
         return f.read()
 
+
+def license():
+    with open('LICENSE') as f:
+        return f.read()
+
+
 setup(
     name='limesurvey',
     version='0.0.1',
     description='LimeSurvey Remote Control 2 API client library',
+    long_description=readme(),
     license='CeCILL-C',
     author='Dimitri Papadopoulos',
     url='https://github.com/neurospin/limesurvey',
-    packages=['limesurvey'],
+    packages=find_packages(exclude=('tests', 'docs')),
     classifiers=[
         "License :: OSI Approved :: CeCILL-C",
         "Intended Audience :: Developers",
