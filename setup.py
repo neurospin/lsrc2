@@ -43,7 +43,7 @@ def license():
 setup(
     name='lsrc2',
     version='0.0.1',
-    description='LimeSurvey Remote Control 2 API client library',
+    description='LimeSurvey RemoteControl 2 API client library',
     long_description=readme(),
     license='CeCILL-C',
     author='Dimitri Papadopoulos',

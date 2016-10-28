@@ -36,7 +36,7 @@ class Session(object):
     """ Session to remote LimeSurvey_ servers.
     
     Persists authentication and other settings while accessing LimeSurvey_
-    servers using the `Remote Control 2 API`_.
+    servers using the `RemoteControl 2 API`_.
 
     Basic Usage::
 
@@ -74,7 +74,7 @@ class Session(object):
         LSRC2 session key.
 
 .. _LimeSurvey: https://www.limesurvey.org
-.. _Remote Control 2 API: https://manual.limesurvey.org/RemoteControl_2_API
+.. _RemoteControl 2 API: https://manual.limesurvey.org/RemoteControl_2_API
 
     """
     __attrs__ = ['url', 'key']
@@ -87,7 +87,7 @@ class Session(object):
         self.session = requests.Session()
         # Keep-alive is 100% automatic in Requests, thanks to urllib3
         self.session.headers.update({'content-type': 'application/json'})
-        # start a LimeSurvey Remote Control 2 session
+        # start a LimeSurvey RemoteControl 2 session
         self.key = self._get_session_key(username, password)
 
     def __enter__(self):

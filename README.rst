@@ -1,5 +1,5 @@
-LimeSurvey Remote Control 2 API client library
-==============================================
+LimeSurvey RemoteControl 2 API client library
+=============================================
 
 This module is a client library to access LimeSurvey_ servers using the
 `RemoteControl 2 API`_.
