@@ -1,7 +1,7 @@
 Python LimeSurvey
 =================
 
-The Python LimeSurvey module encapuslates the JSON-RPC LimeSurvey_ `Remote
+The Python `lsrc2` module encapuslates the JSON-RPC LimeSurvey_ `Remote
 Control 2 API`_ *(LSRC2)* in a straightforward Python API. Now your Python
 scripts will easily interact with remote LimeSurvey_ servers::
 
