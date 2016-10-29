@@ -27,12 +27,7 @@
 # The fact that you are presently reading this means that you have had
 # knowledge of the CeCILL-C license and that you accept its terms.
 
-__title__ = 'lsrc2'
-__version__ = '0.0.1'
-__build__ = 0x000001
-__author__ = 'Dimitri Papadopoulos'
-__license__ = 'CeCILL-C'
-__copyright__ = 'Copyright (c) 2016 CEA'
-
-from .session import session, Session
-from .exceptions import LimeSurveyError
+class LimeSurveyError(Exception):
+    def __init__(self, message, code):
+        super(LimeSurveyError, self).__init__(message)
+        self.code = code

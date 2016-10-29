@@ -156,12 +156,12 @@ class Session(object):
             status = response['status']
         except (TypeError, KeyError):
             if error is not None:
-                logger.error('LSRC2 failed to create a session key')
+                logging.error('LSRC2 failed to create a session key')
                 response = None
             else:
                 logging.info('LSRC2 new session key: {0}'.format(response))
         else:
-            logger.error(status)
+            logging.error(status)
             error = {
                 'code': -32099,  # implementation-defined error in JSON-RPC
                 'message': status,
@@ -220,7 +220,7 @@ class Session(object):
                 # When a survey is empty, LSRC2 also returns a dict:
                 # {"status": "No Tokens found"}
                 if error is not None:
-                    logger.error('JSON-RPC error report does not match "status"')
+                    logging.error('JSON-RPC error report does not match "status"')
                     error = None
             else:
                 error = {
@@ -246,14 +246,14 @@ class Session(object):
         if type(responses) is dict:
             if 'status' in responses:
                 error = {
-                    'code': -32500,  # application error in XML-RPC
+                    'code': -32099,  # implementation-defined error in JSON-RPC
                     'message': responses['status'],
                 }
             else:
                 message = 'JSON-RPC function "export_responses" returned a dictionnary, expected a Base64-encoded string'
-                logger.error(message)
+                logging.error(message)
                 error = {
-                    'code': -32500,  # application error in XML-RPC
+                    'code': -32099,  # implementation-defined error in JSON-RPC
                     'message': message,
                 }
             responses = []
