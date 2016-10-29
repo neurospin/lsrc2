@@ -29,6 +29,7 @@
 
 import requests
 import json
+import base64
 import logging
 
 
@@ -77,7 +78,7 @@ class Session(object):
 .. _RemoteControl 2 API: https://manual.limesurvey.org/RemoteControl_2_API
 
     """
-    __attrs__ = ['url', 'key']
+    __attrs__ = ['url', 'session', 'key']
 
     __request_id = 0
 
@@ -123,11 +124,12 @@ class Session(object):
         response = self.session.post(self.url, data=json.dumps(request))
         response = response.json()
         logging.debug('JSON-RPC response: {0}'.format(response))
-        assert 'result' in response and 'error' in response and 'id' in response
-        if response['error']:
-            logging.error('LSRC2 error: {0}'.format(response['error']))
         assert response['id'] == request['id']
-        return response['result'], response['error']
+        result = response['result']
+        error = response['error']
+        if error:
+            logging.error('LSRC2 error: {0}'.format(error))
+        return result, error
 
     def _get_session_key(self, username, password):
         """Call `get_session_key`_
@@ -147,23 +149,25 @@ class Session(object):
         """
         request = self._request('get_session_key', [username, password])
         response, error = self._post(request)
-        if type(response) is dict:
-            if 'status' in response:
-                logger.error(response['status'])
-                error = {
-                    'code': -32099,  # implementation-defined error in JSON-RPC
-                    'message': response['status'],
-                }
+
+        # fix non-sensical LSRC2 error handling
+        # completely at odds with JSON-RPC error handling
+        try:
+            status = response['status']
+        except (TypeError, KeyError):
+            if error is not None:
+                logger.error('LSRC2 failed to create a session key')
+                response = None
             else:
-                message = 'JSON-RPC function "get_session_key" returned a dictionnary, expected a string'
-                logger.error(message)
-                error = {
-                    'code': -32099,  # implementation-defined error in JSON-RPC
-                    'message': message,
-                }
-            response = None
+                logging.info('LSRC2 new session key: {0}'.format(response))
         else:
-            logging.info('LSRC2 new session key: {0}'.format(response))
+            logger.error(status)
+            error = {
+                'code': -32099,  # implementation-defined error in JSON-RPC
+                'message': status,
+            }
+            response = None
+
         return response
 
     def _release_session_key(self, key):
@@ -199,31 +203,29 @@ class Session(object):
         request = self._request('list_surveys', [self.key])
         return self._post(request)
 
-    def participants(self, survey, start=0, limit=500, unused=False):
+    def participants(self, survey, start=0, limit=500, unused=False, attributes=False):
         request = self._request('list_participants',
-                                [self.key, survey, start, limit, False])
+                                [self.key, survey, start, limit, unused, attributes])
         responses, error = self._post(request)
 
-        # When a survey is empty, LimeSurvey returns this dict
-        # instead of an empty list:
-        #    {"status": "No Tokens found"}
-        if type(responses) is dict:
-            if 'status' in responses:
-                if responses['status'] == 'No Tokens found':
-                    if error is not None:
-                        logger.error('RPC error report does not match "status"')
-                        error = None
-                else:
-                    error = {
-                        'code': -32099,  # implementation-defined error in JSON-RPC
-                        'message': responses['status'],
-                    }
+        # fix non-sensical LSRC2 error handling
+        # completely at odds with JSON-RPC error handling
+        try:
+            status = responses['status']
+        except (TypeError, KeyError):
+            pass
+        else:
+            # LSRC2 returns errors as a dict with a 'status' attribute
+            if status == 'No Tokens found':
+                # When a survey is empty, LSRC2 also returns a dict:
+                # {"status": "No Tokens found"}
+                if error is not None:
+                    logger.error('JSON-RPC error report does not match "status"')
+                    error = None
             else:
-                message = 'JSON-RPC function "participants" returned a dictionnary, expected a list'
-                logger.error(message)
                 error = {
                     'code': -32099,  # implementation-defined error in JSON-RPC
-                    'message': message,
+                    'message': status,
                 }
             responses = []
 
