@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2016 CEA
+# Copyright (c) 2016-2021 CEA
 #
 # This software is governed by the CeCILL-C license under French law and
 # abiding by the rules of distribution of free software. You can use,
@@ -29,13 +29,12 @@
 
 import requests
 import json
-import base64
 import logging
 
 
 class Session(object):
     """ Session to remote LimeSurvey_ servers.
-    
+
     Persists authentication and other settings while accessing LimeSurvey_
     servers using the `RemoteControl 2 API`_.
 
